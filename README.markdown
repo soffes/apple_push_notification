@@ -3,8 +3,8 @@ Apple Push Notification
 
 This plugin helps you use the Apple Push Notification system.
 
-Install
--------
+Converting Your Certificate
+---------------------------
 
 Once you have the certificate from Apple for your application, export your key
 and the apple certificate as p12 files. Here is a quick walkthrough on how to do this:
@@ -19,6 +19,11 @@ Now covert the p12 file to a pem file:
 
 Put `apple_push_notification.pem` in config/
 
+Installing
+----------
+
+Simply run the following commands to add apple-push-notification as a submodule to your repo, a plugin to your rails app, and install it.
+
     $ cd ~/my_rails_app
     $ git submodule add git://github.com/samsoffes/apple-push-notification.git vendor/plugins/apple-push-notification
     $ ruby vendor/plugins/apple-push-notification/install.rb
@@ -26,6 +31,8 @@ Put `apple_push_notification.pem` in config/
 
 Example
 -------
+
+*Note: the spaces in `device_token` are optional.*
 
     $ ./script/console
     >> a = ApplePushNotification.new
