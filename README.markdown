@@ -11,7 +11,7 @@ and the apple certificate as p12 files and run :
 Put `apple_push_notification.pem` in config/
 
 Example
-=======
+-------
 
     $ rake apn:migrate
     $ ./script/console
@@ -23,6 +23,4 @@ Example
     >> a.send_notification
     => nil
 
-Copyright (c) 2009 Fabien Penso.
-
-Will be released under the MIT license once Apple release its SDK.
+Copyright (c) 2009 Fabien Penso. Released under the MIT license.
