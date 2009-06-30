@@ -1,7 +1,7 @@
 Apple Push Notification
 =====================
 
-This plugin helps you using the Apple Push Notification system.
+This plugin helps you use the Apple Push Notification system.
 
 Once you have the certificate from Apple for your application, export your key
 and the apple certificate as p12 files and run :
@@ -24,3 +24,5 @@ Example
     => nil
 
 Copyright (c) 2009 Fabien Penso. Released under the MIT license.
+
+Modified by [Sam Soffes](http://samsoff.es).
