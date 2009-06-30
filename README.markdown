@@ -6,8 +6,8 @@ This plugin helps you using the Apple Push Notification system.
 Once you have the certificate from Apple for your application, export your key
 and the apple certificate as p12 files and run :
 
-    openssl pkcs12 -in cert.p12 -out apple_push_notification.pem -nodes -clcerts
-    put apple_push_notification.pem in config/
+    $ openssl pkcs12 -in cert.p12 -out apple_push_notification.pem -nodes -clcerts
+    $ put apple_push_notification.pem in config/
 
 Example
 =======
