@@ -26,7 +26,7 @@ Simply run the following commands to add apple-push-notification as a submodule 
 
     $ cd ~/my_rails_app
     $ git submodule add git://github.com/samsoffes/apple_push_notification.git vendor/plugins/apple_push_notification
-    $ ruby vendor/plugins/apple-push-notification/install.rb
+    $ ruby vendor/plugins/apple_push_notification/install.rb
     $ rake apn:migrate
 
 Example
