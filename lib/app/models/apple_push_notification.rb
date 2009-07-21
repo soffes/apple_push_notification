@@ -70,7 +70,9 @@ class ApplePushNotification < ActiveRecord::Base
 
 	def apn_message_for_sending
 		json = self.to_apple_json
-		"\0\0 #{self.device_token_hexa}\0#{json.length.chr}#{json}"
+		message = "\0\0 #{self.device_token_hexa}\0#{json.length.chr}#{json}"
+		raise "The maximum size allowed for a notification payload is 256 bytes." if message.size.to_i > 256
+		message
 	end
 
 	def device_token_hexa
@@ -81,7 +83,7 @@ class ApplePushNotification < ActiveRecord::Base
 		result = {}
 		result['aps'] = {}
 		result['aps']['alert'] = alert if alert
-		result['aps']['badge'] = badge if badge
+		result['aps']['badge'] = badge.to_i if badge
 		result['aps']['sound'] = sound if sound and sound.is_a? String
 		result['aps']['sound'] = "1.aiff" if sound and sound.is_a?(TrueClass)
 		result.merge appdata if appdata
