@@ -11,7 +11,8 @@ class ApplePushNotification < ActiveRecord::Base
 	HOST = "gateway.sandbox.push.apple.com"
 	PATH = '/'
 	PORT = 2195
-	CERT = File.read("config/apple_push_notification.pem") if File.exists?("config/apple_push_notification.pem")
+	_path = File.join(File.expand_path(RAILS_ROOT), "config", "apple_push_notification.pem") #=> Ex: /Users/macbook/projects/scores/config/apple_push_notification.pem
+  CERT = File.read(_path) if File.exists?(_path)
 	PASSPHRASE = "foobar"
 	CACERT = File.expand_path(File.dirname(__FILE__) + "certs/ca.gateway.sandbox.push.apple.com.crt")
 	USERAGENT = 'Mozilla/5.0 (apple_push_notification Ruby on Rails 0.1)'
