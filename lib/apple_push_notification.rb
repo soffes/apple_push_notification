@@ -1,4 +1,3 @@
-# ApplePushNotification
 require File.join(File.dirname(__FILE__), "app", "models", "apple_push_notification.rb")
 
 %w{ models controllers helpers }.each do |dir| 

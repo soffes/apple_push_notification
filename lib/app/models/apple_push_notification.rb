@@ -1,8 +1,3 @@
-# 
-# Fabien Penso <fabien.penso@conovae.com>
-# April 6th, 2009.
-# 
-
 require 'socket'
 require 'openssl'
 
@@ -11,13 +6,12 @@ class ApplePushNotification < ActiveRecord::Base
 	HOST = "gateway.sandbox.push.apple.com"
 	PATH = '/'
 	PORT = 2195
-	_path = File.join(File.expand_path(RAILS_ROOT), "config", "apple_push_notification.pem") #=> Ex: /Users/macbook/projects/scores/config/apple_push_notification.pem
+	_path = File.join(File.expand_path(RAILS_ROOT), "config", "apple_push_notification.pem")
   CERT = File.read(_path) if File.exists?(_path)
 	PASSPHRASE = "foobar"
-	CACERT = File.expand_path(File.dirname(__FILE__) + "certs/ca.gateway.sandbox.push.apple.com.crt")
-	USERAGENT = 'Mozilla/5.0 (apple_push_notification Ruby on Rails 0.1)'
+	USERAGENT = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_6; en-us) AppleWebKit/528.16 (KHTML, like Gecko) Version/4.0 Safari/528.16'
 
-	attr_accessor :paylod, :sound, :badge, :alert, :appdata
+	attr_accessor :paylod, :sound, :badge, :alert
 	attr_accessible :device_token
 
 	validates_uniqueness_of :device_token
@@ -65,8 +59,9 @@ class ApplePushNotification < ActiveRecord::Base
 	protected
 
 	def to_apple_json
-		logger.debug "Sending #{self.apple_array.to_json}"
-		self.apple_array.to_json
+	  json = self.apple_array.to_json
+		logger.debug "Sending #{json}"
+		json
 	end
 
 	def apn_message_for_sending
@@ -86,9 +81,7 @@ class ApplePushNotification < ActiveRecord::Base
 		result['aps']['alert'] = alert if alert
 		result['aps']['badge'] = badge.to_i if badge
 		result['aps']['sound'] = sound if sound and sound.is_a? String
-		result['aps']['sound'] = "1.aiff" if sound and sound.is_a?(TrueClass)
-		result.merge appdata if appdata
-
+		result['aps']['sound'] = '1.aiff' if sound and sound.is_a? TrueClass
 		result
 	end
 end
