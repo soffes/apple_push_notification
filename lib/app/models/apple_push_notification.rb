@@ -3,13 +3,11 @@ require 'openssl'
 
 class ApplePushNotification < ActiveRecord::Base
 
-	HOST = "gateway.sandbox.push.apple.com"
+	HOST = Rails.env.production? "gateway.push.apple.com" : "gateway.sandbox.push.apple.com"
 	PATH = '/'
 	PORT = 2195
-	_path = File.join(File.expand_path(RAILS_ROOT), "config", "apple_push_notification.pem")
+	_path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", (Rails.env.production? "apn_production.pem" : "apn_development.pem"))
   CERT = File.read(_path) if File.exists?(_path)
-	PASSPHRASE = "foobar"
-	USERAGENT = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_6; en-us) AppleWebKit/528.16 (KHTML, like Gecko) Version/4.0 Safari/528.16'
 
 	attr_accessor :paylod, :sound, :badge, :alert
 	attr_accessible :device_token
@@ -38,7 +36,7 @@ class ApplePushNotification < ActiveRecord::Base
 
 	def self.send_notifications(notifications)
 		ctx = OpenSSL::SSL::SSLContext.new
-		ctx.key = OpenSSL::PKey::RSA.new(CERT, PASSPHRASE)
+		ctx.key = OpenSSL::PKey::RSA.new(CERT)
 		ctx.cert = OpenSSL::X509::Certificate.new(CERT)
 
 		s = TCPSocket.new(HOST, PORT)

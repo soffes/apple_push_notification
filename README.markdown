@@ -13,9 +13,9 @@ and the apple certificate as p12 files. Here's how:
 
 Now covert the p12 file to a pem file:
 
-    $ openssl pkcs12 -in cert.p12 -out apple_push_notification.pem -nodes -clcerts
+    $ openssl pkcs12 -in cert.p12 -out apn_development.pem -nodes -clcerts
 
-Put `apple_push_notification.pem` in config directory of your rails app.
+Put `apn_development.pem` in `config/certs` in your rails app. For production, name your certificate `apn_production.pem` and put it in the same directory. When your rails environment is production, the production Apple Push Notification server and production certificate will be used.
 
 ## Installing
 
