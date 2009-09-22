@@ -8,7 +8,7 @@ class ApplePushNotification < ActiveRecord::Base
 	PORT = 2195
 	_cert = Rails.env.production? ? "apn_production.pem" : "apn_development.pem"
 	_path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", _cert)
-  CERT = File.read(_path) if File.exists?(_path)
+  CERT = File.exists?(_path) ? File.read(_path) : nil
 
 	attr_accessor :paylod, :sound, :badge, :alert
 	attr_accessible :device_token
@@ -17,8 +17,10 @@ class ApplePushNotification < ActiveRecord::Base
 
 	def send_notification
 
+    raise "Missing cert: #{_path}" unless CERT
+
 		ctx = OpenSSL::SSL::SSLContext.new
-		ctx.key = OpenSSL::PKey::RSA.new(CERT, PASSPHRASE)
+		ctx.key = OpenSSL::PKey::RSA.new(CERT)
 		ctx.cert = OpenSSL::X509::Certificate.new(CERT)
 
 		s = TCPSocket.new(HOST, PORT)
@@ -80,7 +82,7 @@ class ApplePushNotification < ActiveRecord::Base
 		result['aps']['alert'] = alert if alert
 		result['aps']['badge'] = badge.to_i if badge
 		result['aps']['sound'] = sound if sound and sound.is_a? String
-		result['aps']['sound'] = '1.aiff' if sound and sound.is_a? TrueClass
+		result['aps']['sound'] = 'default' if sound and sound.is_a? TrueClass
 		result
 	end
 end

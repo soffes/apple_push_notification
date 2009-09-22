@@ -26,15 +26,18 @@ Simply run the following commands to install apple-push-notification as a plugin
 
 ## Example
 
-*Note: the spaces in `device_token` are optional.*
-
     $ ./script/console
     >> a = ApplePushNotification.new
     >> a.device_token = "XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX"
     >> a.badge = 5
     >> a.sound = true
-    >> a.alert = "foobar.aiff"
+    >> a.alert = "Hello world"
     >> a.send_notification
     => nil
+
+### Notes
+
+* The spaces in `device_token` are optional. 
+* The `sound` can be the filename (i.e. `explosion.aiff`) or `true` which will play the default notification sound.
 
 Copyright (c) 2009 Fabien Penso. Released under the MIT license. Modified by [Sam Soffes](http://samsoff.es).
