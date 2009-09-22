@@ -3,10 +3,11 @@ require 'openssl'
 
 class ApplePushNotification < ActiveRecord::Base
 
-	HOST = Rails.env.production? "gateway.push.apple.com" : "gateway.sandbox.push.apple.com"
+	HOST = Rails.env.production? ? "gateway.push.apple.com" : "gateway.sandbox.push.apple.com"
 	PATH = '/'
 	PORT = 2195
-	_path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", (Rails.env.production? "apn_production.pem" : "apn_development.pem"))
+	_cert = Rails.env.production? ? "apn_production.pem" : "apn_development.pem"
+	_path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", _cert)
   CERT = File.read(_path) if File.exists?(_path)
 
 	attr_accessor :paylod, :sound, :badge, :alert
