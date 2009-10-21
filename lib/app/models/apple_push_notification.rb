@@ -3,27 +3,24 @@ require 'openssl'
 
 class ApplePushNotification < ActiveRecord::Base
 
-	HOST = Rails.env.production? ? "gateway.push.apple.com" : "gateway.sandbox.push.apple.com"
-	PATH = '/'
-	PORT = 2195
-	_cert = Rails.env.production? ? "apn_production.pem" : "apn_development.pem"
-	_path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", _cert)
-  CERT = File.exists?(_path) ? File.read(_path) : nil
-
 	attr_accessor :paylod, :sound, :badge, :alert
 	attr_accessible :device_token
+	
+	PORT = 2195
+	
+	cattr_accessor :enviroment
+	self.enviroment = :development
 
 	validates_uniqueness_of :device_token
 
 	def send_notification
-
-    raise "Missing cert: #{_path}" unless CERT
+    raise "Missing cert: #{_path}" unless @@cert
 
 		ctx = OpenSSL::SSL::SSLContext.new
-		ctx.key = OpenSSL::PKey::RSA.new(CERT)
-		ctx.cert = OpenSSL::X509::Certificate.new(CERT)
+		ctx.key = OpenSSL::PKey::RSA.new(@@cert)
+		ctx.cert = OpenSSL::X509::Certificate.new(@@cert)
 
-		s = TCPSocket.new(HOST, PORT)
+		s = TCPSocket.new(@@host, PORT)
 		ssl = OpenSSL::SSL::SSLSocket.new(s, ctx)
 		ssl.sync = true
 		ssl.connect
@@ -36,13 +33,29 @@ class ApplePushNotification < ActiveRecord::Base
 	rescue SocketError => error
 		raise "Error while sending notifications: #{error}"
 	end
+	
+	def self.enviroment= enviroment
+	  @@enviroment = enviroment.to_sym
+    @@host = self.production? ? "gateway.push.apple.com" : "gateway.sandbox.push.apple.com"
+  	cert = self.production? ? "apn_production.pem" : "apn_development.pem"
+  	path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", cert)
+    @@cert = File.exists?(path) ? File.read(path) : nil
+  end
+	
+	def self.development?
+	  @@enviroment != :production
+  end
+	
+	def self.production?
+	  @@enviroment == :production
+  end
 
-	def self.send_notifications(notifications)
+	def self.send_notifications(notifications)	  
 		ctx = OpenSSL::SSL::SSLContext.new
-		ctx.key = OpenSSL::PKey::RSA.new(CERT)
-		ctx.cert = OpenSSL::X509::Certificate.new(CERT)
+		ctx.key = OpenSSL::PKey::RSA.new(@@cert)
+		ctx.cert = OpenSSL::X509::Certificate.new(@@cert)
 
-		s = TCPSocket.new(HOST, PORT)
+		s = TCPSocket.new(@@host, PORT)
 		ssl = OpenSSL::SSL::SSLSocket.new(s, ctx)
 		ssl.sync = true
 		ssl.connect
