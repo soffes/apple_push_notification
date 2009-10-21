@@ -15,7 +15,7 @@ Now covert the p12 file to a pem file:
 
     $ openssl pkcs12 -in cert.p12 -out apn_development.pem -nodes -clcerts
 
-Put `apn_development.pem` in `config/certs` in your rails app. For production, name your certificate `apn_production.pem` and put it in the same directory. When your rails environment is production, the production Apple Push Notification server and production certificate will be used.
+Put `apn_development.pem` in `config/certs` in your rails app. For production, name your certificate `apn_production.pem` and put it in the same directory. See the environment section for more about environments.
 
 ## Installing
 
@@ -34,6 +34,14 @@ Simply run the following commands to install apple-push-notification as a plugin
     >> a.alert = "Hello world"
     >> a.send_notification
     => nil
+
+### Environment
+
+By default, the development environment will always be used. This makes it easy to test your app in production before your iPhone application is approved and your production certificate is active. You can easily override this by adding this line in an initializer or environment file.
+
+    ApplePushNotification.enviroment = Rails.env.to_sym
+
+You can also simply set `ApplePushNotification.enviroment` to `:development` or `:production`. Setting the `ApplePushNotification.enviroment` chooses the appropriate certificate in your `certs` folder and Apple push notification server.
 
 ### Notes
 
