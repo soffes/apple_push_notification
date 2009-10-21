@@ -13,7 +13,7 @@ and the apple certificate as p12 files. Here's how:
 
 Now covert the p12 file to a pem file:
 
-    $ openssl pkcs12 -in cert.p12 -out apn_development.pem -nodes -clcerts
+    $ openssl pkcs12 -in cert.p12 -out apn_development.pem -nodes -clcerts && rm -f cert.p12
 
 Put `apn_development.pem` in `config/certs` in your rails app. For production, name your certificate `apn_production.pem` and put it in the same directory. See the environment section for more about environments.
 
