@@ -35,7 +35,7 @@ Simply run the following commands to install apple-push-notification as a plugin
     >> a.send_notification
     => nil
 
-### Environment
+## Environment
 
 By default, the development environment will always be used. This makes it easy to test your app in production before your iPhone application is approved and your production certificate is active. You can easily override this by adding this line in an initializer or environment file.
 
