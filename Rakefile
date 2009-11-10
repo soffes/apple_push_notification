@@ -30,7 +30,7 @@ begin
     gemspec.description = "Rails plugin for Apple Push Notifications"
     gemspec.email = "sam@samsoff.es"
     gemspec.homepage = "http://github.com/samsoffes/apple_push_notification"
-    gemspec.authors = ["Sam Soffes", "Fabien Penso"]
+    gemspec.authors = ["Sam Soffes"]
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

@@ -61,4 +61,4 @@ You can easily send a test notification from the console once you have your cert
 * The spaces in `device_token` are optional and will be ignored. 
 * The `sound` can be the filename (i.e. `explosion.aiff`) or `true` which will play the default notification sound.
 
-Copyright (c) 2009 [Sam Soffes](http://samsoff.es). Released under the MIT license. Originally by Fabien Penso.
+Copyright (c) 2009 [Sam Soffes](http://samsoff.es). Released under the MIT license. Forked from Fabien Penso.

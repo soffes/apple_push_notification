@@ -1,0 +1,10 @@
+0.1.1 (November 10th, 2009)
+
+* restructure to make model more flexible
+
+* moved migration to generator 
+ 
+ 
+0.1.0 (November 10th, 2009)
+ 
+* initial release
