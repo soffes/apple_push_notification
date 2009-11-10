@@ -19,9 +19,20 @@ Put `apn_development.pem` in `config/certs` in your rails app. For production, n
 
 ## Installing
 
-Simply run the following commands to install apple-push-notification as a plugin to your rails app.
+Install as a gem:
+
+    # Add to config/environment.rb:
+    config.gem "apple_push_notification", :source => "http://gemcutter.org/"
+
+    # At command prompt:
+    $ sudo rake gems:install
+
+or as a plugin:
 
     $ script/plugin install git://github.com/samsoffes/apple_push_notification.git
+
+Once you have installed apple\_push\_notification, run the following command:
+
     $ rake apn:migrate
 
 ## Environment
