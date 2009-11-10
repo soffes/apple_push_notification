@@ -45,6 +45,8 @@ You can also simply set `ApplePushNotification.enviroment` to `:development` or 
 
 ## Example
 
+You can easily send a test notification from the console once you have your certificate configured.
+
     $ script/console
     >> a = ApplePushNotification.new
     >> a.device_token = "XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX"
