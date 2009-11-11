@@ -1,0 +1,7 @@
+== 0.1.1 released 2009-11-10
+
+* Moved from model to "acts_as_push"
+
+== 0.1.0 released 2009-11-10
+
+* Initial release.

@@ -100,3 +100,21 @@ module ApplePushNotification
   	end
   end
 end
+
+##
+# Add acts_as_push method to ActiveRecord::Base so ApplePushNotification is accessible.
+#
+ActiveRecord::Base.class_eval do
+  
+  ##
+  # Set attribute names and include the ApplePushNotification module.
+  #
+  def self.acts_as_push(enviroment = :development, options = {})
+    class_inheritable_reader :apn_options
+    write_inheritable_attribute :apn_options, {
+      :enviroment   => enviroment,
+      :certificate  => options[:certificate]
+    }
+    include ApplePushNotification
+  end
+end
