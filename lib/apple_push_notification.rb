@@ -3,6 +3,15 @@ require 'openssl'
 
 module ApplePushNotification
 
+  def self.extended(base)
+    # Added device_token attribute if not included by acts_as_pushable
+    unless base.respond_to?(:acts_as_push_options)
+      base.class_eval do
+        attr_accessor :device_token
+      end
+    end
+  end
+
   APN_PORT = 2195
   @@apn_cert = nil
   @@apn_host = nil
@@ -30,9 +39,7 @@ module ApplePushNotification
   
   self.apn_enviroment = :development
   
-  attr_accessor :sound, :badge, :alert, :device_token
-  
-  def send_notification
+  def send_notification options
     raise "Missing apple push notification certificate" unless @@apn_cert
 
     ctx = OpenSSL::SSL::SSLContext.new
@@ -44,7 +51,7 @@ module ApplePushNotification
     ssl.sync = true
     ssl.connect
 
-    ssl.write(self.apn_message_for_sending)
+    ssl.write(self.apn_message_for_sending(options))
     ssl.close
     s.close
   rescue SocketError => error
@@ -55,39 +62,40 @@ module ApplePushNotification
     d = Object.new
     d.extend ApplePushNotification
     d.device_token = token
-    d.alert = options[:alert] if options[:alert]
-    d.badge = options[:badge] if options[:badge]
-    d.sound = options[:sound] if options[:sound]
-    d.send_notification
+    d.send_notification options
   end
 
   protected
 
-  def to_apple_json
-    json = self.apple_array.to_json
-  end
-
-  def apn_message_for_sending
-    json = self.to_apple_json
+  def apn_message_for_sending options
+    json = ApplePushNotification::apple_json_array options
     message = "\0\0 #{self.device_token_hexa}\0#{json.length.chr}#{json}"
     raise "The maximum size allowed for a notification payload is 256 bytes." if message.size.to_i > 256
     message
   end
 
   def device_token_hexa
-    [self.device_token.delete(' ')].pack('H*')
+    # Use `device_token` as the method to get the token from
+    # unless it is overridde from acts_as_pushable
+    debugger
+    apn_token_field = "device_token"
+    if respond_to?(:acts_as_push_options)
+      apn_token_field = acts_as_push_options[:device_token_field]
+    end
+    token = send(apn_token_field.to_sym)
+    [token.delete(' ')].pack('H*')
   end
 
-  def apple_array
+  def self.apple_json_array options
     result = {}
     result['aps'] = {}
-    result['aps']['alert'] = alert if alert
-    result['aps']['badge'] = badge.to_i if badge
-    result['aps']['sound'] = sound if sound and sound.is_a? String
-    result['aps']['sound'] = 'default' if sound and sound.is_a? TrueClass
-    result
+    result['aps']['alert'] = options[:alert].to_s if options[:alert]
+    result['aps']['badge'] = options[:badge].to_i if options[:badge]
+    result['aps']['sound'] = options[:sound] if options[:sound] and options[:sound].is_a? String
+    result['aps']['sound'] = 'default' if options[:sound] and options[:sound].is_a? TrueClass
+    result.to_json
   end
     
 end
 
-require File.dirname(__FILE__) + "/apple_push_notification/acts_as_push"
+require File.dirname(__FILE__) + "/apple_push_notification/acts_as_pushable"
