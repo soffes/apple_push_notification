@@ -5,10 +5,10 @@
 
 Gem::Specification.new do |s|
   s.name = %q{apple_push_notification}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Sam Soffes", "Fabien Penso"]
+  s.authors = ["Sam Soffes"]
   s.date = %q{2009-11-10}
   s.description = %q{Rails plugin for Apple Push Notifications}
   s.email = %q{sam@samsoff.es}
@@ -17,19 +17,18 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".gitignore",
+     "CHANGELOG.rdoc",
      "LICENSE",
      "Rakefile",
      "Readme.markdown",
      "VERSION",
+     "apple_push_notification.gemspec",
      "init.rb",
-     "install.rb",
-     "lib/app/models/apple_push_notification.rb",
      "lib/apple_push_notification.rb",
-     "lib/db/migrate/20090406132059_create_apple_push_notifications.rb",
-     "tasks/apple_push_notification_tasks.rake",
+     "lib/apple_push_notification/acts_as_pushable.rb",
+     "rails/init.rb",
      "test/apple_push_notification_test.rb",
-     "test/test_helper.rb",
-     "uninstall.rb"
+     "test/test_helper.rb"
   ]
   s.homepage = %q{http://github.com/samsoffes/apple_push_notification}
   s.rdoc_options = ["--charset=UTF-8"]
