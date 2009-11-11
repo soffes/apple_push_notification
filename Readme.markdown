@@ -16,7 +16,7 @@ or as a plugin:
 
     $ script/plugin install git://github.com/samsoffes/apple_push_notification.git
 
-Once you have installed apple\_push\_notification, run the following command:
+Once you have installed ApplePushNotification, run the following command:
 
     $ rake apn:migrate
 
@@ -43,22 +43,59 @@ By default, the development environment will always be used. This makes it easy 
 
 You can also simply set `ApplePushNotification.enviroment` to `:development` or `:production`. Setting the `ApplePushNotification.enviroment` chooses the appropriate certificate in your `certs` folder and Apple push notification server.
 
-## Example
+## Usage
 
-You can easily send a test notification from the console once you have your certificate configured.
+You can use ApplePushNotification with an ActiveRecord model, standalone, or on any object.
+
+### ActiveRecord
+
+Just add `acts_as_pushable` to your model.
+
+    class Device < ActiveRecord::Base
+        acts_as_pushable
+    end
+
+You can then send a notification like this
+
+    d.send_notification :alert => "I heart Rails"
+
+The `send_notification` method accepts a hash of options for the notification parameters. See the Parameters section for more information.
+
+Your model must have a `device_token` attribute. If you wish to change this to something else (like `device` for example), simply pass it like this `acts_as_pushable :device`.
+
+### Standalone
+
+Simply call `ApplePushNotification.send_notification` and pass the device token as the first parameter and the hash of notification options as the second (see the Parameters section for more information).
 
     $ script/console
-    >> a = ApplePushNotification.new
-    >> a.device_token = "XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX"
-    >> a.badge = 5
-    >> a.sound = true
-    >> a.alert = "Hello world"
-    >> a.send_notification
+    >> token = "XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX"
+    >> ApplePushNotification.send_notification token, :alert => "Hello World!", :badge => 5, :sound => true
     => nil
+
+### Any Object
+
+You can extend ApplePushNotification with any class. It will look for the `device_token` method when sending the notification. When ApplePushNotification is extended, if `device_token=` isn't defined, getters and setters are generated.
+
+    $ script/console
+    >> token = "XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX"
+    >> d = Object.new
+    >> d.extend ApplePushNotification
+    >> d.device_token = token
+    >> d.send_notification :alert => "So flexible"
+    => nil
+
+See the Parameters section for more information on what `send_notification` accepts.
+
+## Parameters
+
+The following notification parameters can be defined in the options hash:
+
+* `alert` - text displayed to the use
+* `sound` - this can be the filename (i.e. `explosion.aiff`) or `true` which will play the default notification sound
+* `badge` - this must be an integer
 
 ### Notes
 
 * The spaces in `device_token` are optional and will be ignored. 
-* The `sound` can be the filename (i.e. `explosion.aiff`) or `true` which will play the default notification sound.
 
 Copyright (c) 2009 [Sam Soffes](http://samsoff.es). Released under the MIT license. Forked from Fabien Penso.

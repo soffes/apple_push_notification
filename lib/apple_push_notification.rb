@@ -77,12 +77,12 @@ module ApplePushNotification
   def device_token_hexa
     # Use `device_token` as the method to get the token from
     # unless it is overridde from acts_as_pushable
-    debugger
     apn_token_field = "device_token"
     if respond_to?(:acts_as_push_options)
       apn_token_field = acts_as_push_options[:device_token_field]
     end
     token = send(apn_token_field.to_sym)
+    raise "Cannot send push notification without device token" if !token || token.empty?
     [token.delete(' ')].pack('H*')
   end
 
