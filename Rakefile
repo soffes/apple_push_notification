@@ -29,6 +29,7 @@ begin
     gemspec.email = "sam@samsoff.es"
     gemspec.homepage = "http://github.com/samsoffes/apple_push_notification"
     gemspec.authors = ["Sam Soffes"]
+    gemspec.add_development_dependency("rspec", ">= 1.2.9")
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
