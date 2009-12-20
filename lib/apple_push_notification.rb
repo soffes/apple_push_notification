@@ -87,9 +87,8 @@ module ApplePushNotification
   end
 
   def self.apple_json_array options
-    options.with_indifferent_access!
-    
-    payload = { 'aps' => {} }.merge(options[:custom])
+    payload = { 'aps' => {} }
+    payload.merge! options[:custom] if options[:custom]
     payload['aps']['alert'] = options[:alert].to_s if options[:alert]
     payload['aps']['badge'] = options[:badge].to_i if options[:badge]
     
@@ -103,6 +102,7 @@ module ApplePushNotification
     
     payload.to_json
   end
+
     
 end
 
