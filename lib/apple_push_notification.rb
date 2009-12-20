@@ -4,7 +4,7 @@ require 'openssl'
 module ApplePushNotification
 
   def self.extended(base)
-    # Added device_token attribute if not included by acts_as_pushable
+    # Add device_token attribute if not included by acts_as_pushable
     unless base.respond_to?(:acts_as_push_options)
       base.class_eval do
         attr_accessor :device_token
@@ -28,19 +28,20 @@ module ApplePushNotification
     @@apn_enviroment == :production
   end
   
-  def self.apn_enviroment= enviroment
+  def self.apn_enviroment=(enviroment)
     @@apn_enviroment = enviroment.to_sym
     @@apn_host = self.apn_production? ? "gateway.push.apple.com" : "gateway.sandbox.push.apple.com"
     cert = self.apn_production? ? "apn_production.pem" : "apn_development.pem"
     path = File.join(File.expand_path(RAILS_ROOT), "config", "certs", cert)
     @@apn_cert = File.exists?(path) ? File.read(path) : nil
-    raise "Missing apple push notification certificate in #{path}" unless @@apn_cert
+    raise "Missing Apple push notification certificate in #{path}" unless @@apn_cert
   end
   
   self.apn_enviroment = :development
   
-  def send_notification options
-    raise "Missing apple push notification certificate" unless @@apn_cert
+  def send_notification(options)
+    raise "Missing Apple push notification certificate" unless @@apn_cert
+    raise "Missing Apple push notification host" unless @@apn_host
 
     ctx = OpenSSL::SSL::SSLContext.new
     ctx.key = OpenSSL::PKey::RSA.new(@@apn_cert)
@@ -55,10 +56,10 @@ module ApplePushNotification
     ssl.close
     s.close
   rescue SocketError => error
-    raise "Error while sending notifications: #{error}"
+    raise "Error while sending notification: #{error}"
   end
   
-  def self.send_notification token, options = {}
+  def self.send_notification(token, options = {})
     d = Object.new
     d.extend ApplePushNotification
     d.device_token = token
@@ -67,7 +68,7 @@ module ApplePushNotification
 
   protected
 
-  def apn_message_for_sending options
+  def apn_message_for_sending(options)
     json = ApplePushNotification::apple_json_array options
     message = "\0\0 #{self.device_token_hexa}\0#{json.length.chr}#{json}"
     raise "The maximum size allowed for a notification payload is 256 bytes." if message.size.to_i > 256
@@ -87,7 +88,7 @@ module ApplePushNotification
   end
 
   def self.apple_json_array options
-    payload = { 'aps' => {} }
+    payload, empty_playload = { 'aps' => {} }
     payload.merge! options[:custom] if options[:custom]
     payload['aps']['alert'] = options[:alert].to_s if options[:alert]
     payload['aps']['badge'] = options[:badge].to_i if options[:badge]

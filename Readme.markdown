@@ -16,10 +16,6 @@ or as a plugin:
 
     $ script/plugin install git://github.com/samsoffes/apple_push_notification.git
 
-Once you have installed ApplePushNotification, run the following command:
-
-    $ rake apn:migrate
-
 ## Converting Your Certificate
 
 Once you have the certificate from Apple for your application, export your key
@@ -88,14 +84,17 @@ See the Parameters section for more information on what `send_notification` acce
 
 ## Parameters
 
-The following notification parameters can be defined in the options hash:
+The following notification parameters can be defined in the options hash. All parameters are optional.
 
 * `alert` - text displayed to the use
 * `sound` - this can be the filename (i.e. `explosion.aiff`) or `true` which will play the default notification sound
 * `badge` - this must be an integer
+* `custom` - this is a hash that you can add any values to that will be passed to your application
 
 ### Notes
 
-* The spaces in `device_token` are optional and will be ignored. 
+* The spaces in `device_token` are optional and will be ignored.
 
-Copyright (c) 2009 [Sam Soffes](http://samsoff.es). Released under the MIT license. Forked from Fabien Penso.
+Thank you [Squeegy](http://github.com/Squeegy) and [cfc](http://github.com/cfc) for your contributions and Fabien Penso for you original base.
+
+Copyright (c) 2009 [Sam Soffes](http://samsoff.es). Released under the MIT license.
