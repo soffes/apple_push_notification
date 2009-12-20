@@ -102,7 +102,6 @@ module ApplePushNotification
     
     payload.to_json
   end
-
     
 end
 
