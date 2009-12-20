@@ -1,4 +1,4 @@
-== 0.1.1 released 2009-11-10
+== 0.2.0 released 2009-11-10
 
 * Moved from model to "acts_as_pushable".
 * Updated readme for new interface.
