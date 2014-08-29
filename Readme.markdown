@@ -1,3 +1,7 @@
+This library is very old. I recommend using [Houston](https://github.com/nomad/houston) instead.
+
+---
+
 # Apple Push Notification
 
 This plugin helps you use the Apple Push Notification system.
